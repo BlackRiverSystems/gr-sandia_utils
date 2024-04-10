@@ -106,33 +106,34 @@ message(STATUS "Building for version: ${VERSION} / ${LIBVER}")
 ########################################################################
 # Build and register unit test
 ########################################################################
-include(GrTest)
+if(ENABLE_TESTING)
+  include(GrTest)
 
-# If your unit tests require special include paths, add them here
-#include_directories()
-# List all files that contain Boost.UTF unit tests here
-list(APPEND test_sandia_utils_sources
-  qa_file_sink.cc
-  qa_vita49_tcp_msg_source.cc
-)
-# Anything we need to link to for the unit tests go here
-list(APPEND GR_TEST_TARGET_DEPS gnuradio::gnuradio-blocks gnuradio-sandia_utils Boost::filesystem)
+  # If your unit tests require special include paths, add them here
+  #include_directories()
+  # List all files that contain Boost.UTF unit tests here
+  list(APPEND test_sandia_utils_sources
+    qa_file_sink.cc
+    qa_vita49_tcp_msg_source.cc
+  )
+  # Anything we need to link to for the unit tests go here
+  list(APPEND GR_TEST_TARGET_DEPS gnuradio::gnuradio-blocks gnuradio-sandia_utils Boost::filesystem)
 
-if(NOT test_sandia_utils_sources)
-    MESSAGE(STATUS "No C++ unit tests... skipping")
-    return()
-endif(NOT test_sandia_utils_sources)
+  if(NOT test_sandia_utils_sources)
+      MESSAGE(STATUS "No C++ unit tests... skipping")
+      return()
+  endif(NOT test_sandia_utils_sources)
 
-foreach(qa_file ${test_sandia_utils_sources})
-    GR_ADD_CPP_TEST("sandia_utils_${qa_file}"
-        ${CMAKE_CURRENT_SOURCE_DIR}/${qa_file}
-    )
-endforeach(qa_file)
+  foreach(qa_file ${test_sandia_utils_sources})
+      GR_ADD_CPP_TEST("sandia_utils_${qa_file}"
+          ${CMAKE_CURRENT_SOURCE_DIR}/${qa_file}
+      )
+  endforeach(qa_file)
 
-GR_ADD_CPP_TEST("sandia_utils_qa_vitaclassid" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_vitaclassid.cc )
-GR_ADD_CPP_TEST("sandia_utils_qa_CifValue" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_CifValue.cc )
-GR_ADD_CPP_TEST("sandia_utils_qa_vitaheader" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_vitaheader.cc )
-GR_ADD_CPP_TEST("sandia_utils_qa_vitatrailer" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_vitatrailer.cc )
-GR_ADD_CPP_TEST("sandia_utils_qa_vrtpacket" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_vrtpacket.cc )
-GR_ADD_CPP_TEST("sandia_utils_qa_ContextPacket" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_ContextPacket.cc )
-
+  GR_ADD_CPP_TEST("sandia_utils_qa_vitaclassid" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_vitaclassid.cc )
+  GR_ADD_CPP_TEST("sandia_utils_qa_CifValue" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_CifValue.cc )
+  GR_ADD_CPP_TEST("sandia_utils_qa_vitaheader" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_vitaheader.cc )
+  GR_ADD_CPP_TEST("sandia_utils_qa_vitatrailer" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_vitatrailer.cc )
+  GR_ADD_CPP_TEST("sandia_utils_qa_vrtpacket" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_vrtpacket.cc )
+  GR_ADD_CPP_TEST("sandia_utils_qa_ContextPacket" ${CMAKE_CURRENT_SOURCE_DIR}/vita/qa_ContextPacket.cc )
+endif(ENABLE_TESTING)
